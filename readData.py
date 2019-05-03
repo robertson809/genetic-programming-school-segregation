@@ -4,6 +4,7 @@ import math
 #temporarily changing .8 to .001 to make testing easier
 SPLIT = .05
 
+filename = schoolsbluegreen
 #Reads a csv of datapoints into an array of datapoint pairs
 def readData(filename):
     with open(filename) as csv_file:
@@ -11,6 +12,8 @@ def readData(filename):
         #csv_file.seek(0)
         csv_reader = csv.reader(csv_file,delimiter=',')
         dataset=list(csv_reader)
+        schoolIDs = dataset[:0]
+        
         columns = dataset[0]
         dataset = dataset[1:]
         for row in range(len(dataset)):
