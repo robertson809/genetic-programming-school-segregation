@@ -6,16 +6,19 @@ SPLIT = .05
 
 
 #Reads a csv of datapoints into an array of datapoint pairs
+#the with statement works with objects that have enter and exit statements
+#so it closes the file when it's done. open is a built in function that 
+#returns a file object
 def readData(filename):
     with open(filename) as csv_file:
         #dialect = csv.Sniffer().sniff(csv_file.read(1024))
         #csv_file.seek(0)
         csv_reader = csv.reader(csv_file,delimiter=',')
-        dataset=list(csv_reader)
-        schoolIDs = dataset[:0]
+        dataset = list(csv_reader)
+        schoolIDs = dataset[1]
         capacities = dataset[:4]
         
-        print(schoolIDS[1])
+        print schoolIDs
         for row in range(len(schoolIDs)):
                 schoolIDs[row] = float(dataset[row])
                 capacities[row] = float(capacities[row])
