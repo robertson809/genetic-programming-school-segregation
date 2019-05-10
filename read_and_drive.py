@@ -5,7 +5,7 @@ import math
 import time
 import copy
 
-k = 250 
+k = 25 
 over_capacity_assignment_count = 0
 #####################################################################################
 #               ReadData                                                            #
@@ -30,8 +30,8 @@ def readData(roads, schools):
         for row in rc_dataset:
             #testing stopping condition for small datasets
             row_count += 1
-            # if row_count == k:
-            #     break
+            if row_count == k:
+                break
             road_id = int(row[0])
             ses = int(row[3])
             pop = float(row[1])
@@ -224,7 +224,9 @@ class District:
 #################################################################
 #           Assignment class has two instances                  #
 # rs_list  - a list with length of the number of roads where    #
-#               each entry is a school_id, not a school object  # 
+#               each entry is a school_id, not a school object  #
+#               will have a none entry if there are no schools  #
+#               in range                                        # 
 # fitness   - the fitness of the school assignment              #
 #################################################################
 class Assignment:
@@ -251,30 +253,41 @@ class Assignment:
         #already checked overcapacity
                     
     def populate_schools(self, district):
-        for i in len(self.rs_list):
+        for i in range(len(self.rs_list)):
             school_id = self.rs_list[i] #school we're looking at
+            if school_id is None: #this road was not assigned to any school bc nothing was within range by Lena's data
+                continue
             pop = district.road_list[i].pop #number of people now going to school school_id
             self.assignment_pop[school_id] += pop
-        
+            
+            
+    ########################################################################
+    #                             Crossover                                #
+    ########################################################################
     #crossover from 20 to 80 percent
     def crossover(self, other, district):
         assigned = False
-        lower = len(self.rs_list) * .2
-        upper = len(self.rs_list) * .8
+        lower = int(len(self.rs_list) * .2)
+        upper = int(len(self.rs_list) * .8)
+        print ' lower :', lower, ' upper :', upper
         while(not assigned):
             pos = random.randint(lower, upper)
             temp = self.rs_list[pos:]
             self.rs_list[pos:] = other.rs_list[pos:]
             other.rs_list[pos:] = temp
-            assigned = check_valid(self, district) and check_valid(other, district)
+            assigned = self.check_valid(district) and other.check_valid(district)
+        return self
     
+    ########################################################################
+    #                             Mutate                                   #
+    ########################################################################
     #randomly swap anywhere from 10 to 20 percent of the number of schools
     def mutate(self, district):
         num_mutations = int(random.uniform(.1,.2) * len(self.rs_list))
         print ' the number of mutations is ', num_mutations
         for i in range(num_mutations):
             completed = False
-            while(not completed)
+            while(not completed):
                 valid = True
                 pos1 = random.randint(0, len(self.rs_list)) #road number 1
                 pos2 = random.randint(0, len(self.rs_list)) #road number 2
@@ -286,25 +299,25 @@ class Assignment:
                   + district.road_list[pos2].pop
                 potential_school2 = self.assignment_pop[school_id2] - district.road_list[pos2].pop\
                   + district.road_list[pos1].pop
-              
+                  
                  #overcapacity?
-                 if potential_school1 > district.school_list[school_id1].cap:
+                if potential_school1 > district.school_list[school_id1].cap:
                      valid = False
-                 if potential_school2 > district.school_list[school_id2].cap:
+                if potential_school2 > district.school_list[school_id2].cap:
                      valid = False
                  
                  #swap roads
-                 temp = self.rs_list[pos1]
-                 self.rs_list[pos1] = self.rs_list[pos2]
-                 self.rs_list[pos2] = temp
+                temp = self.rs_list[pos1]
+                self.rs_list[pos1] = self.rs_list[pos2]
+                self.rs_list[pos2] = temp
              
                  #update populations 
-                 if valid:
+                if valid:
                      self.assignment_pop[school_id1] = self.assignment_pop[school_id1] - district.road_list[pos1].pop\
                       + district.road_list[pos2].pop
                      self.assignment_pop[school_id2] = self.assignment_pop[school_id2] - district.road_list[pos2].pop\
                       + district.road_list[pos1].pop
-                      completed = True
+                     completed = True
     
     #check to see whether an offspring produced by crossover (rather than spawn) is valid based on 
     #the potential to make a school overcapcity
@@ -314,7 +327,7 @@ class Assignment:
         self.assignment_pop = [0] * len(district.school_list) #total the population this assignment gives
         assert len(self.rs_list) == len(district.road_list)
         self.populate_schools(district) #populates the schools by filling self.assignment_pop
-        for school_id in len(district.school_list):
+        for school_id in range(len(district.school_list)):
             if assignment_pop[school_id] > district.school_list[school_id].cap:
                 over_capacity = True
                 print 'school ', school_id, ' was assigned ', assignment_pop[school_id], \
@@ -324,28 +337,14 @@ class Assignment:
                 
     def pretty_print(self):
         print 'the child has fitness: ', self.fitness
+        print self.rs_list
         
         
 ########################################################################
-#                             Driver methods                           #
+#                             Driver                                  #
 ########################################################################
-
-
-########################################################################
-#                             Crossover                                #
-########################################################################
-
-    
- 
- 
- 
-########################################################################
-#                             Mutate                                   #
-########################################################################
-
-
-BG_district = readData("all-rc.csv", "allschools.csv")
-n = 100
+all_district = readData("all-rc.csv", "allschools.csv")
+n = 5
 start = time.time()
 start2 = time.clock()
 children = []
@@ -354,7 +353,7 @@ king = None
 
 fitness_sum = 0
 for i in range(n):
-    children.append(BG_district.spawn())
+    children.append(all_district.spawn())
     children[i][0].pretty_print()
     fitness_sum += children[i][0].fitness 
     if children[i][1].fitness < best_fit:
@@ -365,5 +364,10 @@ print 'the best fitness we found was', king.fitness
 mean = fitness_sum / n   
 print 'the mean fitness was ', mean
 
+children[3][1].pretty_print()
+children[2][1].pretty_print()
+children[3][1].crossover(children[2][1], all_district).pretty_print()
+children[2][1].mutate().pretty_print()
+
 print 'the total number of overcapacity assignments is ', over_capacity_assignment_count
-print 'The process took ', time.time() - start, ' to create ', n, ' assignments with ', len(BG_district.road_list), ' roads'
+print 'The process took ', time.time() - start, ' to create ', n, ' assignments with ', len(all_district.road_list), ' roads'
