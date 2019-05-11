@@ -242,10 +242,10 @@ class Assignment:
     # define equality as outputting the same number (assuming that if f(10) = g(10), then f = g
     def __lt__(self, other):
         return self.fitness < other.fitness
-        print 'using __lt__'
+        
     def cmp_lt(self, other):
         return self.fitness < other.fitness
-        print 'using cmp_lt'
+        
 
     #use Lena's function here
     def calcFitness(self, district): #populated_school_list is the number of people (entry) in each school (id)
@@ -307,8 +307,6 @@ class Assignment:
         num_mutations = int(random.uniform(.001,.002) * len(self.rs_list))
         #print ' the number of mutations is ', num_mutations
         for i in range(num_mutations):
-            if i % 100 == 0:
-                #print 'mutation number', i, 'of', num_mutations
             completed = False
             while(not completed):
                 valid = True
@@ -358,10 +356,8 @@ class Assignment:
         for school_id in range(len(district.school_list)):
             if self.assignment_pop[school_id] > district.school_list[school_id].cap:
                 over_capacity = True
-                print 'school ', school_id, ' was assigned ', self.assignment_pop[school_id], \
-                ' children but it has a capacity of ', district.school_list[school_id].cap
-        if over_capacity:
-            print 'unvaible offspring'
+                #print 'school ', school_id, ' was assigned ', self.assignment_pop[school_id], \
+                #' children but it has a capacity of ', district.school_list[school_id].cap
             
         return not over_capacity
         

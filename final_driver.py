@@ -17,6 +17,7 @@ def evolution(gen_size, num_torn, district, tol):
     and for tournament, the number of tournaments
     :param tol: the error below which we consider ourselves to have found the solution
     """''
+    output = [] #tuple list of king fitness, diversity at each generation
     kings = []
     converged = False
     # create a population
@@ -26,12 +27,18 @@ def evolution(gen_size, num_torn, district, tol):
     print('finished making original generation')
 
     heappush(kings, original[1]) #put original[1], the king, onto the heap kings
+    output.append((original[1].fitness, None))
     old_gen = original
+    
 
     # simulate generations of natural selection
     converg_count = 0
     gen_count = 0
     while not converged:
+        print 'output:'
+        for entry in output:
+            print entry[0], entry[1]
+            print ''
         if kings[0].fitness < tol: #smallest element in a heap is always heap[0]
             converged = True
             print("Error below tolerance, sucess! Printing king")
@@ -49,12 +56,16 @@ def evolution(gen_size, num_torn, district, tol):
         'minutes'
         #########################################################################
         start = time.time()
+        
         #print('The diversity of generation ', gen_count, " is ", diversity(old_gen[0]))
         next_gen = run_generation(old_gen, num_torn, district)
         king = next_gen[1]
+        
+        output.append((king.fitness, diversity(next_gen[0]))) #record results
 
         # print('most fit individual from generation ', gen_count, ' has fitness', king.fitness)
         heappush(kings, king)
+        
 
         
         
@@ -165,9 +176,9 @@ def tournament(pop, num_torns, district):
     # torns = []
 
     # create num_torn tournaments from which to choose a winner
-    print 'num_torns is', num_torns
+    #print 'num_torns is', num_torns
     for i in range(num_torns):
-        print 'running tournament', i
+        #print 'running tournament', i
         # 2nd place implementation
         # torns.append([])
         # run tournaments
@@ -192,7 +203,7 @@ def tournament(pop, num_torns, district):
         best = float('inf')
         best_child = None
         for j in range(len(pop) % num_torns):
-            print ' examining straggler '
+            #print ' examining straggler '
             fitness = pop[((num_torns - 1) * torn_size) + torn_size + j].calcFitness(district)
             if fitness < best:
                 best = fitness
