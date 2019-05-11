@@ -5,19 +5,19 @@ import math
 import time
 import copy
 
-k = 2500
+k = 25000
 over_capacity_assignment_count = 0
-#####################################################################################
-#               ReadData                                                            #
-#                                                                                   # 
-#   Returns a tuple - road_list, school_cap_list                                    #
-#       road_list - list of road objects, which                                     #   
-#                    contains all road segments                                     #   
-#       school_cap_list - position is ID as defined by the assumption that          #
-#                         the schools are ordered in the same way in the            #
-#                         rc file and the schools file, starting at 0 and continuing#
-#                         to 54                                                     #
-#####################################################################################
+######################################################################################
+#               ReadData                                                             #
+#                                                                                    # 
+#   Returns a tuple - road_list, school_cap_list                                     #
+#       road_list - list of road objects, which                                      #   
+#                    contains all road segments                                      #   
+#       school_cap_list - position is ID as defined by the assumption that           #
+#                         the schools are ordered in the same way in the             #
+#                         rc file and the schools file, starting at 0 and continuing #
+#                         to 54                                                      #
+######################################################################################
 def readData(roads, schools):
     with open(roads) as rc_file, open(schools) as schools_file:
         # Each row read from the csv file is returned as a list of strings
@@ -53,7 +53,7 @@ def readData(roads, schools):
         school_list = []
         #schools_dataset.pop(0) #take out the header
         for row in schools_dataset:
-            school_list.append(School(float(row[4])))
+            school_list.append(School(float(row[4]) * 1.25 ))
         return District(road_list, school_list)   
         
     ########################################################
@@ -150,7 +150,7 @@ class District:
     def check_capacity(self, current_assignment, position, road, school_id):
         cap = self.school_list[school_id].cap
         pop = road.pop
-        if self.running_cap[school_id] + pop > cap * 1.25:
+        if self.running_cap[school_id] + pop > cap:
             global over_capacity_assignment_count 
             over_capacity_assignment_count += 1
             return False
@@ -278,16 +278,21 @@ class Assignment:
     #crossover from 20 to 80 percent
     def crossover(self, other, district):
         assigned = False
-        lower = int(len(self.rs_list) * .2)
-        upper = int(len(self.rs_list) * .8)
+        lower = int(len(self.rs_list) * .1)
+        upper = int(len(self.rs_list) * .9)
         child = copy.deepcopy(self)
+        count = 0 #
         while(not assigned):
+            count += 1 #
+            print 'attempt number', count, ' at producing viable offspring from crossover'
             pos = random.randint(lower, upper)
             temp = child.rs_list[pos:]
             child.rs_list[pos:] = other.rs_list[pos:]
             other.rs_list[pos:] = temp
             assigned = child.check_valid(district) and other.check_valid(district)
         child.calcFitness(district)
+        if random.randint(0,1) == 0:
+            child = other
         return child
     
     ########################################################################
@@ -297,10 +302,13 @@ class Assignment:
     #if there are 1000 schools, we will swap 10 to 20 times
     def mutate(self, district):
         if self.assignment_pop is None: #mutating an OG child
-            self.check_valid(district)
-        num_mutations = int(random.uniform(.1,.2) * len(self.rs_list))
+            if not self.check_valid(district):
+                print 'the parent passed was not valid'
+        num_mutations = int(random.uniform(.001,.002) * len(self.rs_list))
         #print ' the number of mutations is ', num_mutations
         for i in range(num_mutations):
+            if i % 100 == 0:
+                #print 'mutation number', i, 'of', num_mutations
             completed = False
             while(not completed):
                 valid = True
@@ -319,12 +327,9 @@ class Assignment:
                   + district.road_list[pos1].pop
                   
                  #overcapacity?
-                if potential_school1 > district.school_list[school_id1].cap:
-                     print ' bad kid'
+                if potential_school1 > district.school_list[school_id1].cap or \
+                potential_school2 > district.school_list[school_id2].cap:
                      valid = False
-                if potential_school2 > district.school_list[school_id2].cap:
-                     valid = False
-                     print ' bad kid'
                  
                 #swap roads
                 temp = self.rs_list[pos1]
@@ -337,6 +342,7 @@ class Assignment:
                       + district.road_list[pos2].pop
                      self.assignment_pop[school_id2] = self.assignment_pop[school_id2] - district.road_list[pos2].pop\
                       + district.road_list[pos1].pop
+                      
                      completed = True
                      self.calcFitness(district)
         return self
@@ -352,9 +358,11 @@ class Assignment:
         for school_id in range(len(district.school_list)):
             if self.assignment_pop[school_id] > district.school_list[school_id].cap:
                 over_capacity = True
-                # print 'school ', school_id, ' was assigned ', self.assignment_pop[school_id], \
-                # ' children but it has a capacity of ', district.school_list[school_id].cap
-                time.sleep(5)
+                print 'school ', school_id, ' was assigned ', self.assignment_pop[school_id], \
+                ' children but it has a capacity of ', district.school_list[school_id].cap
+        if over_capacity:
+            print 'unvaible offspring'
+            
         return not over_capacity
         
                 

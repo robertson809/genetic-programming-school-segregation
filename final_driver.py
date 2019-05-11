@@ -45,8 +45,8 @@ def evolution(gen_size, num_torn, district, tol):
 
 
         #########################################################################
-        print gen_count, int(kings[0].fitness), int(diversity(old_gen[0])), int(old_gen[1].fitness), 'in', time.time() - start, \
-        'seconds'
+        print gen_count, int(kings[0].fitness), int(diversity(old_gen[0])), int(old_gen[1].fitness), 'in', (time.time() - start) / 60.0, \
+        'minutes'
         #########################################################################
         start = time.time()
         #print('The diversity of generation ', gen_count, " is ", diversity(old_gen[0]))
@@ -92,10 +92,12 @@ def run_generation(old_gen, num_tourns, district):
 
     count = 0
     while len(next_gen) < len(old_gen[0]):
-        count += 1
+        #count += 1
+        #print 'running tournament ', count
         champs = tournament(old_gen[0], num_tourns, district)
         # get n kids from a tournament that splits the population into n groups
         for i in range(num_tourns):
+            #print ' breeding child ', i, ' of ', num_tourns
             # randomly select two parents
             index1 = randint(0, len(champs) - 1)
             index2 = randint(0, len(champs) - 1)
@@ -109,20 +111,25 @@ def run_generation(old_gen, num_tourns, district):
 
             # reproduction, parameters taken from Kinnear Generality and difficulty
             rand = randint(0, 100)
-            #normal crossover
-            if rand < 50:
-                child = parent1.crossover(parent2, district)
-            #crossover without considering fitness
-            elif rand < 75:
-                r_index1 = randint(0, len(old_gen[0]) - 1)
-                r_index2 = randint(0, len(old_gen[0]) - 1)
-                child = old_gen[0][r_index1].crossover(old_gen[0][r_index2], district)
+            # #normal crossover
+#             if rand < 50:
+#                 print 'crossing over'
+#                 child = parent1.crossover(parent2, district)
+#
+#             #crossover without considering fitness
+#             elif rand < 75:
+#                 print 'crossing over random'
+#                 r_index1 = randint(0, len(old_gen[0]) - 1)
+#                 r_index2 = randint(0, len(old_gen[0]) - 1)
+#                 child = old_gen[0][r_index1].crossover(old_gen[0][r_index2], district)
             #regular mutate
-            elif rand < 90:
+            if rand < 90:
+                #print 'mutating'
                 parent1.mutate(district)
                 child = parent1
             #new original
             else:
+                #print 'spawning'
                 child = district.spawn()
 
             if child.fitness < best_fitness:
@@ -158,7 +165,9 @@ def tournament(pop, num_torns, district):
     # torns = []
 
     # create num_torn tournaments from which to choose a winner
+    print 'num_torns is', num_torns
     for i in range(num_torns):
+        print 'running tournament', i
         # 2nd place implementation
         # torns.append([])
         # run tournaments
@@ -175,13 +184,15 @@ def tournament(pop, num_torns, district):
         # final best
         if best_child is not None:
             champions.append(best_child)
-
+    
+    
     if len(pop) % num_torns != 0:
         # add the stragglers leftover from integer division to the last one
         # definitely check this
         best = float('inf')
         best_child = None
         for j in range(len(pop) % num_torns):
+            print ' examining straggler '
             fitness = pop[((num_torns - 1) * torn_size) + torn_size + j].calcFitness(district)
             if fitness < best:
                 best = fitness
