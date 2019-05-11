@@ -21,12 +21,13 @@ def evolution(gen_size, num_torn, district, tol):
     converged = False
     # create a population
     print('making original generation')
+    start = time.time()
     original = new_gen(gen_size, district)
     print('finished making original generation')
 
     heappush(kings, original[1]) #put original[1], the king, onto the heap kings
     old_gen = original
-    
+
     # simulate generations of natural selection
     converg_count = 0
     gen_count = 0
@@ -41,17 +42,20 @@ def evolution(gen_size, num_torn, district, tol):
         gen_count += 1
         #print("generation:", gen_count)
         #most fit individual ever, diversity, and size
+
+
         #########################################################################
-        print gen_count, kings[0].fitness, diversity(old_gen[0]), old_gen[1].fitness, len(old_gen[0])
+        print gen_count, int(kings[0].fitness), int(diversity(old_gen[0])), int(old_gen[1].fitness), 'in', time.time() - start, \
+        'seconds'
         #########################################################################
+        start = time.time()
         #print('The diversity of generation ', gen_count, " is ", diversity(old_gen[0]))
         next_gen = run_generation(old_gen, num_torn, district)
         king = next_gen[1]
-    
-        #print('most fit individual from generation ', gen_count, ' has fitness', king.fitness)
+
+        # print('most fit individual from generation ', gen_count, ' has fitness', king.fitness)
         heappush(kings, king)
-        for king in kings:
-            print king.fitness
+
         
         
         # aging the population
@@ -61,7 +65,7 @@ def evolution(gen_size, num_torn, district, tol):
         # kings[0] gets the smallest element in the heap
         if king.fitness > kings[0].fitness:
             converg_count += 1
-            if converg_count > 50:
+            if converg_count > 10:
                 print("fitness has not improved in",  converg_count, " generations")
                 converged = True
         else:
@@ -181,13 +185,14 @@ def tournament(pop, num_torns, district):
             fitness = pop[((num_torns - 1) * torn_size) + torn_size + j].calcFitness(district)
             if fitness < best:
                 best = fitness
-                best_tree = copy.deepcopy(pop[((num_torns - 1) * torn_size) + torn_size + j])
-        if best_tree is not None:
-            champions.append(best_tree)
+                best_child = copy.deepcopy(pop[((num_torns - 1) * torn_size) + torn_size + j])
+        if best_child is not None:
+            champions.append(best_child)
         # torns.append([])
         # Use for 2nd place chance
         # torns[num_torns].append(pop[((num_torns - 1) * torn_size) + torn_size + i])
     return champions
+
 
 def new_gen(size, district):
     """
@@ -205,19 +210,21 @@ def new_gen(size, district):
             king = children[i]
             best_fit = king.fitness
     return children, king
-    
-#calculates the diversity of the generation
+
+
+# calculates the diversity of the generation
 def diversity(children):
-    biggest = None
+
     worst_fitness = float('inf')
     for child in children:
         if child.fitness < worst_fitness and child.fitness != float('inf'):
             worst_fitness = child.fitness
-            biggest = child
+
     sum = 0
     for child in children:
         if child.fitness and child.fitness != float('inf'):
             sum += (child.fitness / worst_fitness)
+
     mean = sum / len(children)
 
     diff_sum = 0
@@ -228,9 +235,8 @@ def diversity(children):
 
     var = math.sqrt(diff_sum)
     return var
-    
-    
-    
+
+
 def main():
     if (len(sys.argv) != 3):
         print
@@ -254,8 +260,7 @@ def main():
     error_tol = 10
     torn_size = int(math.sqrt(gen_size))
     evolution(gen_size, torn_size, all_district, error_tol)
-    
-    
+
     
 if __name__ == "__main__":
     main()

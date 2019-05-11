@@ -5,7 +5,7 @@ import math
 import time
 import copy
 
-k = 100
+k = 2500
 over_capacity_assignment_count = 0
 #####################################################################################
 #               ReadData                                                            #
@@ -20,7 +20,7 @@ over_capacity_assignment_count = 0
 #####################################################################################
 def readData(roads, schools):
     with open(roads) as rc_file, open(schools) as schools_file:
-        #Each row read from the csv file is returned as a list of strings
+        # Each row read from the csv file is returned as a list of strings
         rc_dataset = list(csv.reader(rc_file,delimiter=','))
         schools_dataset = list(csv.reader(schools_file, delimiter=','))
         
@@ -30,8 +30,8 @@ def readData(roads, schools):
         for row in rc_dataset:
             #testing stopping condition for small datasets
             row_count += 1
-            if row_count == k:
-                break
+            # if row_count == k:
+            #     break
             road_id = int(row[0])
             ses = int(row[3])
             pop = float(row[1])
@@ -280,14 +280,15 @@ class Assignment:
         assigned = False
         lower = int(len(self.rs_list) * .2)
         upper = int(len(self.rs_list) * .8)
+        child = copy.deepcopy(self)
         while(not assigned):
             pos = random.randint(lower, upper)
-            temp = self.rs_list[pos:]
-            self.rs_list[pos:] = other.rs_list[pos:]
+            temp = child.rs_list[pos:]
+            child.rs_list[pos:] = other.rs_list[pos:]
             other.rs_list[pos:] = temp
-            assigned = self.check_valid(district) and other.check_valid(district)
-        self.calcFitness(district)
-        return self
+            assigned = child.check_valid(district) and other.check_valid(district)
+        child.calcFitness(district)
+        return child
     
     ########################################################################
     #                             Mutate                                   #
@@ -337,7 +338,7 @@ class Assignment:
                      self.assignment_pop[school_id2] = self.assignment_pop[school_id2] - district.road_list[pos2].pop\
                       + district.road_list[pos1].pop
                      completed = True
-                     self.calcFitness(district)       
+                     self.calcFitness(district)
         return self
     
     #check to see whether an offspring produced by crossover (rather than spawn) is valid based on 
@@ -351,8 +352,8 @@ class Assignment:
         for school_id in range(len(district.school_list)):
             if self.assignment_pop[school_id] > district.school_list[school_id].cap:
                 over_capacity = True
-                print 'school ', school_id, ' was assigned ', assignment_pop[school_id], \
-                ' children but it has a capacity of ', district.school_list[school_id].cap
+                # print 'school ', school_id, ' was assigned ', self.assignment_pop[school_id], \
+                # ' children but it has a capacity of ', district.school_list[school_id].cap
                 time.sleep(5)
         return not over_capacity
         
