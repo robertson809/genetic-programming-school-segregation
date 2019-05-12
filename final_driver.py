@@ -27,7 +27,7 @@ def evolution(gen_size, num_torn, district, tol):
     print('finished making original generation')
 
     heappush(kings, original[1]) #put original[1], the king, onto the heap kings
-    output.append((original[1].fitness, None))
+    output.append((original[1].fitness, 0))
     old_gen = original
     
 
@@ -36,9 +36,11 @@ def evolution(gen_size, num_torn, district, tol):
     gen_count = 0
     while not converged:
         print 'output:'
+        print ''    
         for entry in output:
-            print entry[0], entry[1]
-            print ''
+            print int(entry[0]), int(entry[1])
+        print ''    
+        
         if kings[0].fitness < tol: #smallest element in a heap is always heap[0]
             converged = True
             print("Error below tolerance, sucess! Printing king")
