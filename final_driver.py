@@ -147,7 +147,8 @@ def run_generation(old_gen, num_tourns, district):
 
             if child.fitness < best_fitness:
                 best_fitness = child.fitness
-                king = copy.deepcopy(child)
+                king = Assignment(child.rs_list)
+                king.fitness = child.fitness
             next_gen.append(child)
 
     #print 'the king has fitness ', king.fitness
