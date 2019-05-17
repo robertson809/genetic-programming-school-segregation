@@ -8,12 +8,9 @@ from random import randint
 gen_size = 100
 error_tol = 10
 converg_tol = 50
-torn_size = int(math.sqrt(gen_size))
-
-
+num_torn = int(math.sqrt(gen_size))
 
 #main driver program
-##population, and list of lists for train data
 def evolution(gen_size, num_torn, district, tol):
     """
     :param data: the training data set, a list of input output touples
@@ -25,11 +22,10 @@ def evolution(gen_size, num_torn, district, tol):
     output = [] #tuple list of king fitness, diversity at each generation
     kings = []
     converged = False
-    # create a population
     timesum = 0
     #print('making original generation')
     start = time.time()
-    original = new_gen(gen_size, district)
+    original = new_gen(gen_size, district) # create a population
     #print('finished making original generation')
 
     heappush(kings, original[1]) #put original[1], the king, onto the heap kings
@@ -42,7 +38,6 @@ def evolution(gen_size, num_torn, district, tol):
     # simulate generations of natural selection
     converg_count = 0
     gen_count = 0
-
     while not converged:
         print '#############################################################'
         print '         Output:', sys.argv[1], sys.argv[2]
@@ -60,28 +55,17 @@ def evolution(gen_size, num_torn, district, tol):
             break
 
         gen_count += 1
-        #print("generation:", gen_count)
-        #most fit individual ever, diversity, and size
-
-
-        #########################################################################
-        #print gen_count, int(kings[0].fitness), diversity(old_gen[0]), 'in', (time.time() - start) / 60.0, \
-        #'minutes'
-        #########################################################################
         start = time.time()
-
-        #create new generation
         next_gen = run_generation(old_gen, num_torn, district)
-        #assert len(next_gen[0]) == gen_size
         king = next_gen[1]
         heappush(kings, king)
-        timesum += time.time() - start
+        timesum += time.time() - start #caclulate time to run generation
         output.append((king.fitness, kings[0].fitness, diversity(next_gen[0]), time.time() - start, timesum)) #record results
 
         # age generation
         old_gen = next_gen
 
-        # if we don't improve 10 times in a row, consider us converged
+        # if we don't improve converg_count + 1 times in a row, consider us converged
         # kings[0] gets the smallest element in the heap
         if king.fitness > kings[0].fitness:
             converg_count += 1
@@ -93,7 +77,6 @@ def evolution(gen_size, num_torn, district, tol):
 
 def run_generation(old_gen, num_tourns, district):
     """
-
     :param old_gen: the generation to produce children from in index zero, the king in index 1
     :param details: a touple, the first integer specifying the type of
     parent selection (1 for tournament), the second entry specifying the
@@ -105,9 +88,7 @@ def run_generation(old_gen, num_tourns, district):
     next_gen = []
     best_fitness = float('inf')
     king = None
-    # get the tournament size if we are having a tournament
-    # add the old king
-    old_king = Assignment(old_gen[1].rs_list)
+    old_king = Assignment(old_gen[1].rs_list)  #add the old king
     old_king.fitness = old_gen[1].fitness
     next_gen.append(old_king)
     while len(next_gen) < len(old_gen[0]):
@@ -115,20 +96,12 @@ def run_generation(old_gen, num_tourns, district):
         # get n kids from a tournament that splits the population into n groups
         for i in range(num_tourns):
             #print ' breeding child ', i, ' of ', num_tourns
-            # randomly select two parents
+            # randomly select a parent
             index1 = randint(0, len(champs) - 1)
-            index2 = randint(0, len(champs) - 1)
-
-            # no asexual reproduction
-            while index1 == index2:
-                index2 = randint(0, len(champs) - 1)
-
             parent1 = champs[index1]
-            parent2 = champs[index2]
-
-            # reproduction, parameters taken from Kinnear Generality and difficulty
-            rand = randint(0, 100)
-            # #normal crossover
+            
+            rand = randint(0, 100)#reproduction options, currently set only to mutate
+            #normal crossover
 #             if rand < 50:
 #                 print 'crossing over'
 #                 child = parent1.crossover(parent2, district)
@@ -139,6 +112,7 @@ def run_generation(old_gen, num_tourns, district):
 #                 r_index1 = randint(0, len(old_gen[0]) - 1)
 #                 r_index2 = randint(0, len(old_gen[0]) - 1)
 #                 child = old_gen[0][r_index1].crossover(old_gen[0][r_index2], district)
+
             #regular mutate
             if rand < 90:
                 #print 'mutating'
@@ -178,29 +152,22 @@ def tournament(pop, num_torns, district):
     are the most fit
     """
     champions = []
-    # the size of each tournament
-    torn_size = int(len(pop) / num_torns)
-    # torns = []
-
+    torn_size = int(len(pop) / num_torns) # the size of each tournament
     # create num_torn tournaments from which to choose a winner
     #print 'num_torns is', num_torns
     for i in range(num_torns):
         #print 'running tournament', i
-        # 2nd place implementation
-        # torns.append([])
         # run tournaments
         best = float('inf')
         best_child = None
         for j in range(torn_size):
             fitness = pop[(i * torn_size) + j].calcFitness(district)
-            # see if its the best
-            if fitness < best:
+            if fitness < best: #see if its the best
                 best = fitness
                 best_child = copy.deepcopy(pop[(i * torn_size) + j])
             # Use this if you want to keep track and give second place a chance
             # torns[i].append(pop[(i * torn_size) + j])
-        # final best
-        if best_child is not None:
+        if best_child is not None: # final best
             champions.append(best_child)
 
 
@@ -286,7 +253,7 @@ def main():
     ##Set parameters
     # evolution with the data set, 100 people in a generation, (tournament selction with fifteen tournaments),
     # and mse error tolerance of 1
-    evolution(gen_size, torn_size, all_district, error_tol)
+    evolution(gen_size, num_torn, all_district, error_tol)
 
 
 if __name__ == "__main__":
