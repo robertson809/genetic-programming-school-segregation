@@ -1,3 +1,0 @@
-notes
-
-What are the three SES columns in the schools csvs? Are they the current values/ are they used in the calulation at all?
