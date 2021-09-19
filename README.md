@@ -7,8 +7,8 @@ by Michael Robertson for Davidson College's Machine Reasoning Final Project
 ### Table of Contents:
 - [Abstract](#abstract)
 - [Introduction](#introduction)
-- [Data](#Data)
-   - [Given Data]  
+- [Data](#data)
+   - [Given Data] 
           - [Road Populations]\
           - [Road SES Status]\
           - [School Capacities]\
@@ -147,7 +147,7 @@ implementation of genetic programming mechanisms in the
 Background, and continue on to describe our experiments
 and analyze their results.
 ```
-## 3 Background
+## Background
 
 ```
 For her senior thesis Lena collected and estimated data
