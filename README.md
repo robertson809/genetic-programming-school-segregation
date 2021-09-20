@@ -38,114 +38,54 @@ by Michael Robertson for Davidson College's Machine Reasoning Final Project
 ## Abstract
 ```
 ```
-Lena Parker’s (Davidson College class of 2017) thesis ad-
-dressed the problem of reducing socioeconomic segregation
+Lena Parker’s (Davidson College class of 2017) thesis addressed the problem of reducing socioeconomic segregation
 in Charlottle-Meckelenburg Schools without unreasonably
 increasing student commute times. Her linear programming
 approach struggled to run in a reasonable amount of time
-given the size of the problem, so we attempt to find a more ef-
-ficient solution through genetic programming. Over 80 hours,
+given the size of the problem, so we attempt to find a more efficient solution through genetic programming. Over 80 hours,
 our algorithm evolved solutions which improved upon the
 baseline fitness of random assignments by over 90%. We
 hope the assignments we produced would compete with and
-perhaps improve upon Lena’s final solution. Though our re-
-sults require further analysis and verification before potential
+perhaps improve upon Lena’s final solution. Though our results require further analysis and verification before potential
 presentation to the CMS (Charlotte-Mecklenburg Schools),
-the large relative improvement of our solutions in a compar-
-atively short period of time demonstrates the promise of ge-
-netic programming in this problem space.
+the large relative improvement of our solutions in a comparatively short period of time demonstrates the promise of genetic programming in this problem space.
 
 
 ## Introduction
 
 The CMS schools district contained 154,434 students in
-2014, and was the 18thlargest district out of 121 in Amer-
-ica (National Center for Education Statistics 2016). The
+2014, and was the 18thlargest district out of 121 in America (National Center for Education Statistics 2016). The
 mathematical problem of desegregating schools by SES
-(SocioEconomicStatus) could be simply solved by assign-
-ing equal numbers of children of each SES level to each
+(SocioEconomicStatus) could be simply solved by assigning equal numbers of children of each SES level to each
 school. However, as Grundy describes in her 2017 book
-Color and Character, when the U.S. Supreme Court de-
-clined to hear an appeal toCappachione v. Charlotte-
-Mecklenburg Board of Educationin April 2002, it effec-
-tively upheld the ruling of two lower courts that “prior ves-
-tiges of racial discrimination had been eliminated to the ex-
-tent practicable,” and released the CMS from the obligation
+Color and Character, when the U.S. Supreme Court declined to hear an appeal to Cappachione v. Charlotte Mecklenburg Board of Educationin April 2002, it effectively upheld the ruling of two lower courts that “prior vestiges of racial discrimination had been eliminated to the extent practicable,” and released the CMS from the obligation
 to racially desegrate placed upon it by the landmark 1971
 U.S. Supreme Court caseSwann v. Charlotte-Mecklenburg
-Board of Education(Grundy 2017). Later in 2002, the CMS
+Board of Education (Grundy 2017). Later in 2002, the CMS
 implemented a ”School Choice Plan” which led to the near
-immediate resegregation of schools, and they have only be-
-come “increasingly racially and socioeconomically segre-
-gated” since (Grundy 2017) (Parker 2017).
+immediate resegregation of schools, and they have only become “increasingly racially and socioeconomically segregated” since (Grundy 2017) (Parker 2017).
 Though discussions surrounding school assignment in
 Charlotte have traditionally focused on racial segregation
 because of America’s history of racial discrimination, we
 will here focus on SES as the segregating factor, due to
 the availability of student SES data provided to us through
-
-
-
-```
 Lena’s analysis and enrichment of CMS data, and because
 of the close correlation of race and SES in Charlotte.
-```
-```
-Figure 1: Population Demographics of Charlotte from
-2017 Census data. Graphic created by Data USA.
-```
-```
-Figure 2: Each race’s share of the Charlotte population
-living in poverty, as a percentage. Graphic created by
-Data USA.
-```
-```
-Figure 1 shows that although 1.23 times more white peo-
-ple live in Charlotte than African American people, more
-than 35% of people living in poverty were African Amer-
-ican, while less than 28% were white. Data provided by.
-Data USA^1 used data from the Census Bureau 2017 Amer-
-ican Community Survey 5-year Estimate to create the visu-
-alizations above.
+
+Figure 1 shows that although 1.23 times more white people live in Charlotte than African American people, more
+than 35% of people living in poverty were African American, while less than 28% were white. Data provided by [Lets go to Quora](https://www.quora.com) [Data USA](datausa.io/profile/geo/charlotte-nc) kkk [hello](datausa.io/profile/geo/charlotte-nc)(accessed 17 May 2019) used data from the Census Bureau 2017 American Community Survey 5-year Estimate to create the visualizations above.
 The difficulty of breaking SES segregation in schools
-comes from the clustering of populations by SES in Char-
-lotte, as shown in figure 4, because a completely SES-
-equitable assignment would require unreasonable commute
+comes from the clustering of populations by SES in Charlotte, as shown in figure 4, because a completely SES-equitable assignment would require unreasonable commute
 times. By borrowing Lena’s objective function and using it
 as a fitness function for our genetic programming approach,
-```
-(^1) datausa.io/profile/geo/charlotte-nc/#demographics, accessed
-17 May 2019.
-
-
-Figure 3: Geographic visualization of racial demograph-
-ics in Charlotte from Census 2010 data using Open-
-StreetMap software, from Eric Fischer atflickr.com/
-photos/walkingsf/5559889573/, accessed 19 May
-
-2019. Each dot represents 25 people. Red dots represent
-white people, blue represent black people, green Asian,
-orange Hispanic, and yellow other.
-
-Figure 4: SES evaluation by CMS planning services in
-2016 using Census Data. Though the number of dots
-in figure 3 obscures the underlying roads and makes vi-
-sualization of the layout of Charlotte difficult, note the
-overlap between blue dots representing the black popu-
-lation in figure 3 and the yellow tracts representing low
-SES census tracts in figure 4. This distribution is collo-
-quailly known as the “wedge and crescent”, and appears
-frequently in data visualizations of Charlotte’s popula-
-tion.
-
-```
-we attempt to minimize it, and return a solution of compa-
-rable or better fitness/objective function value in a shorter
+we attempt to minimize it, and return a solution of comparable or better fitness/objective function value in a shorter
 running time. We will outline the nature of the data Lena
 made available to us from her thesis work and describe our
 implementation of genetic programming mechanisms in the
 Background, and continue on to describe our experiments
 and analyze their results.
+
+
 ```
 ## Background
 
