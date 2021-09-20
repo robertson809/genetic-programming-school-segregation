@@ -73,7 +73,9 @@ Lena’s analysis and enrichment of CMS data, and because
 of the close correlation of race and SES in Charlotte.
 
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![Alt text](fig/race_demographs.png?raw=true "Population Demographics of Charlotte from 2017 Census data. Graphic created by Data USA.")
+
+![alt text](https://github.com/[robertson809]/[genetic-programming-school-segregation]/blob/[master]/fig/fitness_time_graph.png?raw=true)
 
 Figure 1 shows that although 1.23 times more white people live in Charlotte than African American people, more
 than 35% of people living in poverty were African American, while less than 28% were white. Data provided by [Data USA](https://www.datausa.io/profile/geo/charlotte-nc#demographics) (accessed 17 May 2019) used data from the Census Bureau 2017 American Community Survey 5-year Estimate to create the visualizations above.
