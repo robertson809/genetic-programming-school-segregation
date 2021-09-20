@@ -72,8 +72,11 @@ the availability of student SES data provided to us through
 Lena’s analysis and enrichment of CMS data, and because
 of the close correlation of race and SES in Charlotte.
 
+
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+
 Figure 1 shows that although 1.23 times more white people live in Charlotte than African American people, more
-than 35% of people living in poverty were African American, while less than 28% were white. Data provided by [Lets go to Quora](https://www.quora.com) [Data USA](datausa.io/profile/geo/charlotte-nc) kkk [hello](datausa.io/profile/geo/charlotte-nc)(accessed 17 May 2019) used data from the Census Bureau 2017 American Community Survey 5-year Estimate to create the visualizations above.
+than 35% of people living in poverty were African American, while less than 28% were white. Data provided by [Data USA](https://www.datausa.io/profile/geo/charlotte-nc#demographics) (accessed 17 May 2019) used data from the Census Bureau 2017 American Community Survey 5-year Estimate to create the visualizations above.
 The difficulty of breaking SES segregation in schools
 comes from the clustering of populations by SES in Charlotte, as shown in figure 4, because a completely SES-equitable assignment would require unreasonable commute
 times. By borrowing Lena’s objective function and using it
