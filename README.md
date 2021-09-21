@@ -135,10 +135,9 @@ would have accomplished nothing in our given time frame
 had not Lena given us the data in a compact and naturally
 intelligible format, and readily assisted in helping us inter-
 pret it.
-```
+
 ### Data
 
-```
 We received two data files from Lena which partitioned the
 CMS district into “bluegreen” and “greyvoilet” sections. We
 combined these sets to form a dataset that encompassed the
