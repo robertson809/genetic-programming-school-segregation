@@ -64,6 +64,8 @@ U.S. Supreme Court caseSwann v. Charlotte-Mecklenburg
 Board of Education (Grundy 2017). Later in 2002, the CMS
 implemented a ”School Choice Plan” which led to the near
 immediate resegregation of schools, and they have only become “increasingly racially and socioeconomically segregated” since (Grundy 2017) (Parker 2017).
+
+
 Though discussions surrounding school assignment in
 Charlotte have traditionally focused on racial segregation
 because of America’s history of racial discrimination, we
@@ -75,13 +77,35 @@ of the close correlation of race and SES in Charlotte.
 
 ![Alt text](fig/race_demographs.png?raw=true "Population Demographics of Charlotte from 2017 Census data. Graphic created by Data USA.")
 
-![alt text](https://github.com/[robertson809]/[genetic-programming-school-segregation]/blob/[master]/fig/fitness_time_graph.png?raw=true)
 
-Figure 1 shows that although 1.23 times more white people live in Charlotte than African American people, more
+<p align="center">
+    Figure 1: Population Demographics of Charlotte from 2017 Census data. Data USA.
+</center> 
+
+</p>
+
+![Alt text](fig/pov_demographs.png?raw=true "Poverty Demographics of Charlotte from 2017 Census data. Data USA.")
+
+<p align="center">
+    Figure 2: Each race’s share of the Charlotte population living in poverty, as a percentage. Graphic created by Data USA.
+</center> 
+</p>
+
+
+Figures 1 and 2 show that although 1.23 times more white people live in Charlotte than African American people, more
 than 35% of people living in poverty were African American, while less than 28% were white. Data provided by [Data USA](https://www.datausa.io/profile/geo/charlotte-nc#demographics) (accessed 17 May 2019) used data from the Census Bureau 2017 American Community Survey 5-year Estimate to create the visualizations above.
+
+<p align="center">
+  <img src="https://github.com/robertson809/genetic-programming-school-segregation/blob/master/fig/race_viz.png" alt="drawing" width="600"/>
+</p>
+
+<p align="center">
+    Figure 3: Geographic visualization of racial demographics in Charlotte from Census 2010 data using Open- StreetMap software, from Eric Fischer at flickr.com/ photos/walkingsf/5559889573/, accessed 19 May 2019. Each dot represents 25 people. Red dots represent white people, blue represent black people, green Asian, orange Hispanic, and yellow other.
+</center> 
+</p>
+
 The difficulty of breaking SES segregation in schools
-comes from the clustering of populations by SES in Charlotte, as shown in figure 4, because a completely SES-equitable assignment would require unreasonable commute
-times. By borrowing Lena’s objective function and using it
+comes from the clustering of populations by SES in Charlotte, as shown in figure 4, because a completely SES-equitable assignment would require unreasonable commute times. By borrowing Lena’s objective function and using it
 as a fitness function for our genetic programming approach,
 we attempt to minimize it, and return a solution of comparable or better fitness/objective function value in a shorter
 running time. We will outline the nature of the data Lena
@@ -90,11 +114,18 @@ implementation of genetic programming mechanisms in the
 Background, and continue on to describe our experiments
 and analyze their results.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/robertson809/genetic-programming-school-segregation/master/fig/SES_CMS.png" alt="drawing" width="600"/>
+</p>
 
-```
+<p align="center">
+    Figure 4: SES evaluation by CMS planning services in 2016 using Census Data. Though the number of dots in figure 3 obscures the underlying roads and makes vi- sualization of the layout of Charlotte difficult, note the overlap between blue dots representing the black population in figure 3 and the yellow tracts representing low SES census tracts in figure 4. This distribution is locally known as the “wedge and crescent,” and appears frequently in data visualizations of Charlotte’s population.
+</center> 
+</p>
+
+
 ## Background
 
-```
 For her senior thesis Lena collected and estimated data
 points for each of the 47,150 roads in the Open Mapping
 Mecklenburg dataset and for each of the 94 schools. We
