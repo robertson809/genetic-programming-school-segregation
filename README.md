@@ -35,202 +35,25 @@ by Michael Robertson for Davidson College's Machine Reasoning Final Project
 
 ---
 
-## Abstract
-```
-```
-Lena Parker’s (Davidson College class of 2017) thesis addressed the problem of reducing socioeconomic segregation
-in Charlottle-Meckelenburg Schools without unreasonably
-increasing student commute times. Her linear programming
-approach struggled to run in a reasonable amount of time
-given the size of the problem, so we attempt to find a more efficient solution through genetic programming. Over 80 hours,
-our algorithm evolved solutions which improved upon the
-baseline fitness of random assignments by over 90%. We
-hope the assignments we produced would compete with and
-perhaps improve upon Lena’s final solution. Though our results require further analysis and verification before potential
-presentation to the CMS (Charlotte-Mecklenburg Schools),
-the large relative improvement of our solutions in a comparatively short period of time demonstrates the promise of genetic programming in this problem space.
-
-
-## Introduction
-
-The CMS schools district contained 154,434 students in
-2014, and was the 18thlargest district out of 121 in America (National Center for Education Statistics 2016). The
-mathematical problem of desegregating schools by SES
-(SocioEconomicStatus) could be simply solved by assigning equal numbers of children of each SES level to each
-school. However, as Grundy describes in her 2017 book
-Color and Character, when the U.S. Supreme Court declined to hear an appeal to Cappachione v. Charlotte Mecklenburg Board of Educationin April 2002, it effectively upheld the ruling of two lower courts that “prior vestiges of racial discrimination had been eliminated to the extent practicable,” and released the CMS from the obligation
-to racially desegrate placed upon it by the landmark 1971
-U.S. Supreme Court caseSwann v. Charlotte-Mecklenburg
-Board of Education (Grundy 2017). Later in 2002, the CMS
-implemented a ”School Choice Plan” which led to the near
-immediate resegregation of schools, and they have only become “increasingly racially and socioeconomically segregated” since (Grundy 2017) (Parker 2017).
-
-
-Though discussions surrounding school assignment in
-Charlotte have traditionally focused on racial segregation
-because of America’s history of racial discrimination, we
-will here focus on SES as the segregating factor, due to
-the availability of student SES data provided to us through
-Lena’s analysis and enrichment of CMS data, and because
-of the close correlation of race and SES in Charlotte.
-
-
-![Alt text](fig/race_demographs.png?raw=true "Population Demographics of Charlotte from 2017 Census data. Graphic created by Data USA.")
-
-
-<p align="center">
-    Figure 1: Population Demographics of Charlotte from 2017 Census data. Data USA.
-</center> 
-
-</p>
-
-![Alt text](fig/pov_demographs.png?raw=true "Poverty Demographics of Charlotte from 2017 Census data. Data USA.")
-
-<p align="center">
-    Figure 2: Each race’s share of the Charlotte population living in poverty, as a percentage. Graphic created by Data USA.
-</center> 
-</p>
-
-
-Figures 1 and 2 show that although 1.23 times more white people live in Charlotte than African American people, more
-than 35% of people living in poverty were African American, while less than 28% were white. Data provided by [Data USA](https://www.datausa.io/profile/geo/charlotte-nc#demographics) (accessed 17 May 2019) used data from the Census Bureau 2017 American Community Survey 5-year Estimate to create the visualizations above.
-
-<p align="center">
-  <img src="https://github.com/robertson809/genetic-programming-school-segregation/blob/master/fig/race_viz.png" alt="drawing" width="600"/>
-</p>
-
-<p align="center">
-    Figure 3: Geographic visualization of racial demographics in Charlotte from Census 2010 data using Open- StreetMap software, from Eric Fischer at flickr.com/ photos/walkingsf/5559889573/, accessed 19 May 2019. Each dot represents 25 people. Red dots represent white people, blue represent black people, green Asian, orange Hispanic, and yellow other.
-</center> 
-</p>
-
-The difficulty of breaking SES segregation in schools
-comes from the clustering of populations by SES in Charlotte, as shown in figure 4, because a completely SES-equitable assignment would require unreasonable commute times. By borrowing Lena’s objective function and using it
-as a fitness function for our genetic programming approach,
-we attempt to minimize it, and return a solution of comparable or better fitness/objective function value in a shorter
-running time. We will outline the nature of the data Lena
-made available to us from her thesis work and describe our
-implementation of genetic programming mechanisms in the
-Background, and continue on to describe our experiments
-and analyze their results.
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/robertson809/genetic-programming-school-segregation/master/fig/SES_CMS.png" alt="drawing" width="600"/>
-</p>
-
-<p align="center">
-    Figure 4: SES evaluation by CMS planning services in 2016 using Census Data. Though the number of dots in figure 3 obscures the underlying roads and makes visualization of the layout of Charlotte difficult, note the overlap between blue dots representing the black population in figure 3 and the yellow tracts representing low SES census tracts in figure 4. This distribution is locally known as the “wedge and crescent,” and appears frequently in data visualizations of Charlotte’s population.
-</center> 
-</p>
-
-
-## Background
-
-For her senior thesis Lena collected and estimated data
-points for each of the 47,150 roads in the Open Mapping
-Mecklenburg dataset and for each of the 94 schools. We
-used nearly all of the data she provided, and though we in-
-vested a significant amount of time in data preparation, we
-would have accomplished nothing in our given time frame
-had not Lena given us the data in a compact and naturally
-intelligible format, and readily assisted in helping us inter-
-pret it.
-
-### Data
-
-We received two data files from Lena which partitioned the
-CMS district into “bluegreen” and “greyvoilet” sections. We
-combined these sets to form a dataset that encompassed the
-entire CMS school district.
-
-#### Given Data
-Each of these files provided well-organized
-data we which we preprocessed into our model of the prob-
-lem. We used four items of data from each of the .csv files:
-
-- **Road Populations** By merging census tract population
-    data with a shape file of all Mecklenburg Country roads
-    from [Open Mapping Mecklenburg](https://maps.co.mecklenburg.nc.us/openmapping/), Lena estimated the
-    population of five to nine-year-old children in each individual road segment based on the proportion of the road to
-    the total road length in the census tract and the population
-    in that tract. For example, if road number five had length
-    1 mile in a census tract with 1,000 five to nine-year-olds
-    and 10 miles of road in it, then she would estimate that
-    road to have (1000) 101 =100 children in it.
-- **Road SES Status** Lena determined a road’s SES status
-    by assigning it the SES status of the census tract the majority of it fell within. Lena then considered the estimated
-    population living in that road as the SES of that road. Expanding upon our previous example, if road five lay in a
-    low SES census tract, all ten people in it would be considered Low SES.
-- **School Capacities** Lena reported the CMS’s stated capacities for each of the 94 schools in the district.
-- **Commuting Times** Using the locations of the 94 schools
-    and speed limits on road segments from Open Mapping
-    Mecklenburg, Lena estimated commute times from each
-    road to each school and reported the commute times to
-    the five closest schools. She reasoned that no assignment
-    should require a student to attend a school further away
-    from their home than five other schools.
-
-
-#### Data Preparation 
-
-Lena formatted the data for the purpose
-of solving the problem using MATLAB’s linear program-
-ming solving tools. We choose to represent a solution the
-problem as a list with length equal to the number of roads
-in the problem. An assignment or solution then consisted of
-filling each of the entries in this list with a school ID. So, in
-a hypothetical problem with ten roads and five schools (with
-IDs 1-5), one possible solution would be:
-
-
-<p align="center">
-   <code>[4, 5, 5, 3, 1, 5, 4, 3, 3, 4]</code>
-</p>
-
-
-In this assignment, the children living on road number 5 will
-attend school 1, no one will attend school 2, the children on
-roads 3, 7, and 8 will attend school 3, and the children on
-roads 0, 6, and 9 will attend school 4. For our algorithm, we
-created the following structures:
-
-- **Road Class** By reading in data from Lena’s csv file, we
-    created road objects for each road, which contained the
-    population of the road, its SES, and a list of the five clos-
-    est schools, each of which we stored as a tuple of the
-    school ID and the distance to the school from the road. An
-    example road might have population ten, Medium SES,
-    and be one mile away from school one, two miles away
-    from school two, three miles from school three, four from
-    school four, and five miles away from school five.
-- **School Class** We read in a school object for each school
-    in the given file. Each instance recorded only the capacity
-    during data intake, but also maintains variables initialized
-    to zero for the number of low, medium, and high SES
-    students attending it, as well as the overall weight it will
-    later recieve based on its calculated SES diversity.
-- **District Class** A district object has a road list and a school
-    list which collect all the road and school objects at data
-    intake. Further, a district contains an assignment list
-    of length equal to the number of roads, initially empty,
-    which is the solution list described above. Lastly, it has
-    a list of length equal to the school list, which keeps a
-    running total of the attendance assigned at each school,
-    in order to dynamically prevent school capacity overflow
-    during the assignment process.
-- **Assignment Class** The assignment object serves as a
-    pseudo-wrapper class for the assignment list in the Dis-
-    trict class. It has a method to calculate its fitness based on
-    the SES diversity of the schools in its solution, and has an
-    instance to store that fitness value.
 
 ### Fitness
+
+<img src="https://render.githubusercontent.com/render/math?math=W(S) = \sum\limits_{i= 1}^{3}\left|(\frac{1}{3} - SES_{i}) \right| + 1">
 
 In Lena’s experiments, she produced solutions based on
 three different objective functions, each of which differ-
 ently valued the relative importance of reducing commute
 time and maximizing school SES diversity. We used only
-one of her weighting functions in our experiments,W(S)=
+one of her weighting functions in our experiments,
+
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=W(S) = \sum \left|(\frac{1}{3} - SES_{i}) \right| %2B+ 1">
+</center>
+</p>
+where the index *i* ranges from 1 to 3.
+
+= \sum\limits_{i= 1}^{3}\left|(\frac{1}{3} - SES_{i}) \right| %2B+ 1
+W(S)=
 ∑^3
 
 i= 1
@@ -248,7 +71,6 @@ i= 1
 SES diversity over commute time. Here the weighting func-
 tion takes a school that has already been assigned students
 
-(^3) No pun intended
 and returns a positive valueW(S)∈[1,^133 ]. We defineS ES 1
 as the proportion of students in the school with a low SES
 status,S ES 2 as the proportion of medium SES students, and
