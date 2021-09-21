@@ -8,29 +8,29 @@ by Michael Robertson for Davidson College's Machine Reasoning Final Project
 - [Abstract](#abstract)
 - [Introduction](#introduction)
 - [Data](#data)
-   - [Given Data] 
+   - [Given Data](#given-data)
           - [Road Populations]\
           - [Road SES Status]\
           - [School Capacities]\
           - [Commuting Times]
    
-  - [Prepared Data]\
+  - [Data Preparation](#data-preparation)\
           - [Road Class]\
           - [School Class]\
           - [District Class]\
           - [Assignment Class]
         
-- [Experiments]
+- [Experiments](#experiments)
      - [Genetic Mechanisms]
      - [Selection and Evolution]
 
-- [Results]
+- [Results](#results)
 
-- [Conclusions]
+- [Conclusions](#conclusions)
 
-- [Acknowledgements]
+- [Acknowledgements](#acknowledgements)
 
-- [Refences]
+- [Refences](#references)
 
 
 ---
@@ -502,16 +502,16 @@ all students across the CMS, and the number of schools who
 have a low-SES proportion greater than 90%.
 
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/robertson809/genetic-programming-school-segregation/master/fig/fit_improv_table.png" alt="drawing" width="600"/>
+</p>
 
-Dataset Fitinital Fitfinal Size % Diff
-Bluegreen 143,567 11,429 25,274 92.
-Greyvoilet 129,450 19,305 21,456 85.
-All 275,967 17,069 46,730 93.
-
-Figure 6: Here Fitinitialis the fitness of the most fit individ-
-ual of generation 1, and Fitfinalis the fitness of the most fit
+<p algin= "center">
+	Figure 6: Here F<sub>itinitial</sub> is the fitness of the most fit individual of generation 1, and Fit<sub>final</sub> is 
+	the fitness of the most fit
 individual after convergence (at the time of writing for the
 full dataset).
+</p>
 
 ## 6 Conclusions
 
