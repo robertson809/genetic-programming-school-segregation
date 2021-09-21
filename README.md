@@ -119,7 +119,7 @@ and analyze their results.
 </p>
 
 <p align="center">
-    Figure 4: SES evaluation by CMS planning services in 2016 using Census Data. Though the number of dots in figure 3 obscures the underlying roads and makes vi- sualization of the layout of Charlotte difficult, note the overlap between blue dots representing the black population in figure 3 and the yellow tracts representing low SES census tracts in figure 4. This distribution is locally known as the “wedge and crescent,” and appears frequently in data visualizations of Charlotte’s population.
+    Figure 4: SES evaluation by CMS planning services in 2016 using Census Data. Though the number of dots in figure 3 obscures the underlying roads and makes visualization of the layout of Charlotte difficult, note the overlap between blue dots representing the black population in figure 3 and the yellow tracts representing low SES census tracts in figure 4. This distribution is locally known as the “wedge and crescent,” and appears frequently in data visualizations of Charlotte’s population.
 </center> 
 </p>
 
@@ -142,32 +142,27 @@ We received two data files from Lena which partitioned the
 CMS district into “bluegreen” and “greyvoilet” sections. We
 combined these sets to form a dataset that encompassed the
 entire CMS school district.
-```
-```
-Given Data Each of these files provided well-organized
+
+#### Given Data
+Each of these files provided well-organized
 data we which we preprocessed into our model of the prob-
 lem. We used four items of data from each of the .csv files:
-```
-- Road PopulationsBy merging census tract population
+
+- **Road Populations** By merging census tract population
     data with a shape file of all Mecklenburg Country roads
-    from Open Mapping Mecklenburg^2 , Lena estimated the
-    population of five to nine-year-old children in each indi-
-    vidual road segment based on the proportion of the road to
+    from [Open Mapping Mecklenburg](https://maps.co.mecklenburg.nc.us/openmapping/), Lena estimated the
+    population of five to nine-year-old children in each individual road segment based on the proportion of the road to
     the total road length in the census tract and the population
     in that tract. For example, if road number five had length
     1 mile in a census tract with 1,000 five to nine-year-olds
     and 10 miles of road in it, then she would estimate that
     road to have (1000) 101 =100 children in it.
-- Road SES StatusLena determined a road’s SES status
-    by assigning it the SES status of the census tract the ma-
-    jority of it fell within. Lena then considered the estimated
-    population living in that road as the SES of that road. Ex-
-    panding upon our previous example, if road five lay in a
-    low SES census tract, all ten people in it would be consid-
-    ered Low SES.
-- School CapacitiesLena reported the CMS’s stated capac-
-    ities for each of the 94 schools in the district.
-- Commuting TimesUsing the locations of the 94 schools
+- **Road SES Status** Lena determined a road’s SES status
+    by assigning it the SES status of the census tract the majority of it fell within. Lena then considered the estimated
+    population living in that road as the SES of that road. Expanding upon our previous example, if road five lay in a
+    low SES census tract, all ten people in it would be considered Low SES.
+- **School Capacities** Lena reported the CMS’s stated capacities for each of the 94 schools in the district.
+- **Commuting Times** Using the locations of the 94 schools
     and speed limits on road segments from Open Mapping
     Mecklenburg, Lena estimated commute times from each
     road to each school and reported the commute times to
@@ -175,10 +170,10 @@ lem. We used four items of data from each of the .csv files:
     should require a student to attend a school further away
     from their home than five other schools.
 
-(^2) maps.co.mecklenburg.nc.us/openmapping/
 
+#### Data Preparation 
 
-Data Preparation Lena formatted the data for the purpose
+Lena formatted the data for the purpose
 of solving the problem using MATLAB’s linear program-
 ming solving tools. We choose to represent a solution the
 problem as a list with length equal to the number of roads
@@ -187,16 +182,19 @@ filling each of the entries in this list with a school ID. So, in
 a hypothetical problem with ten roads and five schools (with
 IDs 1-5), one possible solution would be:
 
-```
-[4, 5 , 5 , 3 , 1 , 5 , 4 , 3 , 3 ,4]
-```
+
+<p align="center">
+   <code>[4, 5, 5, 3, 1, 5, 4, 3, 3, 4]</code>
+</p>
+
+
 In this assignment, the children living on road number 5 will
 attend school 1, no one will attend school 2, the children on
 roads 3, 7, and 8 will attend school 3, and the children on
 roads 0, 6, and 9 will attend school 4. For our algorithm, we
 created the following structures:
 
-- Road ClassBy reading in data from Lena’s csv file, we
+- **Road Class** By reading in data from Lena’s csv file, we
     created road objects for each road, which contained the
     population of the road, its SES, and a list of the five clos-
     est schools, each of which we stored as a tuple of the
@@ -205,13 +203,13 @@ created the following structures:
     and be one mile away from school one, two miles away
     from school two, three miles from school three, four from
     school four, and five miles away from school five.
-- School Class^3 We read in a school object for each school
+- **School Class** We read in a school object for each school
     in the given file. Each instance recorded only the capacity
     during data intake, but also maintains variables initialized
     to zero for the number of low, medium, and high SES
     students attending it, as well as the overall weight it will
     later recieve based on its calculated SES diversity.
-- District ClassA district object has a road list and a school
+- **District Class** A district object has a road list and a school
     list which collect all the road and school objects at data
     intake. Further, a district contains an assignment list
     of length equal to the number of roads, initially empty,
@@ -220,7 +218,7 @@ created the following structures:
     running total of the attendance assigned at each school,
     in order to dynamically prevent school capacity overflow
     during the assignment process.
-- Assignment ClassThe assignment object serves as a
+- **Assignment Class** The assignment object serves as a
     pseudo-wrapper class for the assignment list in the Dis-
     trict class. It has a method to calculate its fitness based on
     the SES diversity of the schools in its solution, and has an
