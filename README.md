@@ -127,12 +127,10 @@ and analyze their results.
 For her senior thesis Lena collected and estimated data
 points for each of the 47,150 roads in the Open Mapping
 Mecklenburg dataset and for each of the 94 schools. We
-used nearly all of the data she provided, and though we in-
-vested a significant amount of time in data preparation, we
+used nearly all of the data she provided, and though we invested a significant amount of time in data preparation, we
 would have accomplished nothing in our given time frame
 had not Lena given us the data in a compact and naturally
-intelligible format, and readily assisted in helping us inter-
-pret it.
+intelligible format, and readily assisted in helping us interpret it.
 
 ### Data
 
@@ -143,8 +141,7 @@ entire CMS school district.
 
 #### Given Data
 Each of these files provided well-organized
-data we which we preprocessed into our model of the prob-
-lem. We used four items of data from each of the .csv files:
+data we which we preprocessed into our model of the problem. We used four items of data from each of the .csv files:
 
 - **Road Populations** By merging census tract population
     data with a shape file of all Mecklenburg Country roads
@@ -154,7 +151,7 @@ lem. We used four items of data from each of the .csv files:
     in that tract. For example, if road number five had length
     1 mile in a census tract with 1,000 five to nine-year-olds
     and 10 miles of road in it, then she would estimate that
-    road to have (1000) 101 =100 children in it.
+    road to have 1000/10 =100 children in it.
 - **Road SES Status** Lena determined a road’s SES status
     by assigning it the SES status of the census tract the majority of it fell within. Lena then considered the estimated
     population living in that road as the SES of that road. Expanding upon our previous example, if road five lay in a
@@ -172,8 +169,7 @@ lem. We used four items of data from each of the .csv files:
 #### Data Preparation 
 
 Lena formatted the data for the purpose
-of solving the problem using MATLAB’s linear program-
-ming solving tools. We choose to represent a solution the
+of solving the problem using MATLAB’s linear programming solving tools. We choose to represent a solution the
 problem as a list with length equal to the number of roads
 in the problem. An assignment or solution then consisted of
 filling each of the entries in this list with a school ID. So, in
@@ -194,8 +190,7 @@ created the following structures:
 
 - **Road Class** By reading in data from Lena’s csv file, we
     created road objects for each road, which contained the
-    population of the road, its SES, and a list of the five clos-
-    est schools, each of which we stored as a tuple of the
+    population of the road, its SES, and a list of the five closest schools, each of which we stored as a tuple of the
     school ID and the distance to the school from the road. An
     example road might have population ten, Medium SES,
     and be one mile away from school one, two miles away
@@ -217,8 +212,7 @@ created the following structures:
     in order to dynamically prevent school capacity overflow
     during the assignment process.
 - **Assignment Class** The assignment object serves as a
-    pseudo-wrapper class for the assignment list in the Dis-
-    trict class. It has a method to calculate its fitness based on
+    pseudo-wrapper class for the assignment list in the District class. It has a method to calculate its fitness based on
     the SES diversity of the schools in its solution, and has an
     instance to store that fitness value.
 	
@@ -227,8 +221,7 @@ created the following structures:
 ### Fitness
 
 In Lena’s experiments, she produced solutions based on
-three different objective functions, each of which differ-
-ently valued the relative importance of reducing commute
+three different objective functions, each of which differently valued the relative importance of reducing commute
 time and maximizing school SES diversity. We used only
 one of her weighting functions in our experiments,
 
@@ -377,8 +370,8 @@ avoiding the infinite loop bug in our crossover method.
 ### Selection and Evolution
 
 We began by generating 100 random solutions, and created
-successive generations of size 100 using a tournament selection algorithm outlined in Miller et al.’s “Genetic Algo-
-rithms, Tournament Selection, and the Effects of Noise.” to
+successive generations of size 100 using a tournament selection algorithm outlined in Miller et al.’s 
+“Genetic Algorithms, Tournament Selection, and the Effects of Noise.” to
 evolove the population until it converged (Miller et al. 1995).
 
 **Tornament Selection** Tournament selection chooses individuals from the population to reproduce by splitting a pop
