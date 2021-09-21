@@ -513,7 +513,7 @@ individual after convergence (at the time of writing for the
 full dataset).
 </p>
 
-## 6 Conclusions
+## Conclusions
 
 Though we have yet to directly compare our results to
 Lena’s, we have good reason to think ours may compete and
@@ -532,7 +532,7 @@ rather using estimates from the Census and other sources. We further
 hope that we can present our solutions to the CMS school
 board, and advocate for their implementation.
 
-## 7 Acknowledgements
+## Acknowledgements
 
 I would like to acknowledge Lena Parker for her enthusiasm
 in supporting my investigation of this problem, and her 
