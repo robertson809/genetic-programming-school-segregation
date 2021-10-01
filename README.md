@@ -8,7 +8,7 @@ by Michael Robertson for Davidson College's Machine Reasoning Final Project
 - [Abstract](#abstract)
 - [Introduction](#introduction)
 - [Data](#data)
-   - [Given Data](#given-data)
+   - [Given Data](#given-data)\
           - [Road Populations]\
           - [Road SES Status]\
           - [School Capacities]\
