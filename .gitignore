@@ -72,7 +72,6 @@ python2/lib/python2.7/re.pyc
 python2/lib/python2.7/site-packages/easy_install.py
 python2/lib/python2.7/site-packages/easy_install.pyc
 *.pyc
-*.py
 *.txt
 *.tmpl
 *.exe
