@@ -10,7 +10,7 @@ error_tol = 10
 converg_tol = 50
 num_torn = int(math.sqrt(gen_size))
 
-#main driver program
+# main driver program
 def evolution(gen_size, num_torn, district, tol):
     """
     :param data: the training data set, a list of input output touples
