@@ -229,9 +229,11 @@ three different objective functions, each of which differently valued the relati
 time and maximizing school SES diversity. We used only
 one of her weighting functions in our experiments,
 
+
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=W(S) = \sum \left|(\frac{1}{3} - SES_{i}) \right| %2B+ 1">
+  <img src="https://github.com/robertson809/genetic-programming-school-segregation/blob/master/fig/W_S.png" alt="drawing" width="200"/>
 </p>
+
 
 where the index *i* ranges from 1 to 3.
 
@@ -246,9 +248,13 @@ stored in our road objects with the calculated school weights,
 we can find the total fitness F(A) of an assignment A by
 taking
 
-<p align = "center">
-<img src="https://render.githubusercontent.com/render/math?math=F(A) = \sum \sum T_{ij}P_{i}W(S_j)">
+
+
+
+<p align="center">
+  <img src="https://github.com/robertson809/genetic-programming-school-segregation/blob/master/fig/F_A.png" alt="drawing" width="200"/>
 </p>
+
 
 
 
