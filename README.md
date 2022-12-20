@@ -1,7 +1,3 @@
-# Demo
-
-In /src, run final_driver.py
-
 # Addressing SES Segregation in Charlottle-Meckelenburg Schools: A Genetic Programming Approach
 
 by Michael Robertson for Davidson College's Machine Reasoning Final Project
@@ -569,4 +565,6 @@ student assignment boundaries. Davidson College Center
 for Interdisciplinary Studies.
 
 
+# Demo
 
+In /src, run final_driver.py
